@@ -1,0 +1,483 @@
+const API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const SESSION_KEY = 'store_dashboard_session';
+
+const loginView = document.querySelector('#loginView');
+const dashboardView = document.querySelector('#dashboardView');
+const loginForm = document.querySelector('#loginForm');
+const loginButton = document.querySelector('#loginButton');
+const demoButton = document.querySelector('#demoButton');
+const loginMessage = document.querySelector('#loginMessage');
+const dashboardMessage = document.querySelector('#dashboardMessage');
+const logoutButton = document.querySelector('#logoutButton');
+const adminPanel = document.querySelector('#adminPanel');
+const adminRows = document.querySelector('#adminRows');
+const brandGrid = document.querySelector('#brandGrid');
+
+const brands = ['APPLE', 'SAMSUNG', 'MI', 'VIVO', 'OPPO', 'REALME', 'MOTOROLA', 'ONE PLUS', 'OTHERS', 'ACCESSORIES'];
+
+const demoUsers = {
+  'kunj11': {
+    password: 'sk@001',
+    displayName: 'KUNJ11',
+    role: 'Store Manager',
+    storeId: 'KUNJ',
+    storeName: 'KUNJ'
+  },
+  'k1011': {
+    password: 'sk@002',
+    displayName: 'K1011',
+    role: 'Store Manager',
+    storeId: 'K10',
+    storeName: 'K10'
+  },
+  'nsk11': {
+    password: 'sk@003',
+    displayName: 'NSK11',
+    role: 'Store Manager',
+    storeId: 'NSK',
+    storeName: 'NSK'
+  },
+  'kbg11': {
+    password: 'sk@004',
+    displayName: 'KBG11',
+    role: 'Store Manager',
+    storeId: 'Karelibaug',
+    storeName: 'Karelibaug'
+  },
+  'raj11': {
+    password: 'sk@005',
+    displayName: 'RAJ11',
+    role: 'Store Manager',
+    storeId: 'Rajpipla',
+    storeName: 'Rajpipla'
+  },
+  'wag11': {
+    password: 'sk@006',
+    displayName: 'WAG11',
+    role: 'Store Manager',
+    storeId: 'Waghodia',
+    storeName: 'Waghodia'
+  },
+  'vivo11': {
+    password: 'sk@007',
+    displayName: 'VIVO11',
+    role: 'Store Manager',
+    storeId: 'Waghodia Vivo',
+    storeName: 'Waghodia Vivo'
+  },
+  'opc11': {
+    password: 'sk@008',
+    displayName: 'OPC11',
+    role: 'Store Manager',
+    storeId: 'OP ROAD CAFE',
+    storeName: 'OP ROAD CAFE'
+  },
+  'opm11': {
+    password: 'sk@009',
+    displayName: 'OPM11',
+    role: 'Store Manager',
+    storeId: 'OP ROAD MBO',
+    storeName: 'OP ROAD MBO'
+  },
+  'alm11': {
+    password: 'sk@010',
+    displayName: 'ALM11',
+    role: 'Store Manager',
+    storeId: 'Alembic',
+    storeName: 'Alembic'
+  },
+  'inc11': {
+    password: 'sk@011',
+    displayName: 'INC11',
+    role: 'Store Manager',
+    storeId: 'INORBIT MALL CAFE',
+    storeName: 'INORBIT MALL CAFE'
+  },
+  'bhc11': {
+    password: 'sk@012',
+    displayName: 'BHC11',
+    role: 'Store Manager',
+    storeId: 'BHAYLI CAFE',
+    storeName: 'BHAYLI CAFE'
+  },
+  'parth11': {
+    password: 'sk@100',
+    displayName: 'Parth11',
+    role: 'Senior',
+    access: 'admin'
+  },
+  'cmd11': {
+    password: 'sk@101',
+    displayName: 'CMD11',
+    role: 'Senior',
+    access: 'admin'
+  },
+  'srinivas11': {
+    password: 'sk@102',
+    displayName: 'Srinivas11',
+    role: 'Senior',
+    access: 'admin'
+  },
+  'vijay11': {
+    password: 'sk@103',
+    displayName: 'Vijay11',
+    role: 'Senior',
+    access: 'admin'
+  },
+  'nilesh11': {
+    password: 'sk@104',
+    displayName: 'nilesh11',
+    role: 'Senior',
+    access: 'admin'
+  },
+  'amit11': {
+    password: 'sk@105',
+    displayName: 'amit11',
+    role: 'Senior',
+    access: 'admin'
+  },
+  'milind11': {
+    password: 'sk@106',
+    displayName: 'Milind11',
+    role: 'Senior',
+    access: 'admin'
+  }
+};
+
+const demoSales = {
+  KUNJ: makeDemoDashboard('KUNJ', 110, 2200000, 78, 1650000, 75, 550000, 86000, 1420000, 16, 8, 176000, [6, 14, 9, 11, 8, 5, 4, 3, 2, 16]),
+  K10: makeDemoDashboard('K10', 95, 1900000, 62, 1280000, 67.4, 620000, 72000, 1190000, 7.6, 5, 108000, [4, 12, 7, 10, 6, 4, 3, 2, 1, 13]),
+  NSK: makeDemoDashboard('NSK', 105, 2100000, 84, 1785000, 85, 315000, 61000, 1610000, 10.9, 7, 151000, [7, 16, 10, 12, 9, 6, 5, 4, 2, 13]),
+  Karelibaug: makeDemoDashboard('Karelibaug', 120, 2400000, 91, 1960000, 81.7, 440000, 80000, 1790000, 9.5, 9, 188000, [8, 18, 11, 13, 10, 7, 5, 4, 3, 12]),
+  Rajpipla: makeDemoDashboard('Rajpipla', 75, 1500000, 48, 930000, 62, 570000, 69000, 870000, 6.9, 4, 82000, [3, 9, 6, 8, 5, 4, 3, 1, 1, 8]),
+  Waghodia: makeDemoDashboard('Waghodia', 88, 1760000, 59, 1215000, 69, 545000, 71000, 1130000, 7.5, 5, 99000, [4, 11, 7, 9, 6, 5, 3, 2, 2, 10]),
+  'Waghodia Vivo': makeDemoDashboard('Waghodia Vivo', 70, 1400000, 52, 1090000, 77.9, 310000, 56000, 980000, 11.2, 4, 84000, [3, 8, 5, 12, 6, 4, 2, 1, 1, 10]),
+  'OP ROAD CAFE': makeDemoDashboard('OP ROAD CAFE', 115, 2300000, 86, 1815000, 78.9, 485000, 76000, 1690000, 7.4, 8, 174000, [8, 17, 10, 12, 9, 6, 5, 4, 2, 13]),
+  'OP ROAD MBO': makeDemoDashboard('OP ROAD MBO', 100, 2000000, 72, 1525000, 76.3, 475000, 68000, 1430000, 6.6, 6, 128000, [6, 15, 9, 10, 8, 5, 4, 3, 2, 10]),
+  Alembic: makeDemoDashboard('Alembic', 92, 1840000, 74, 1580000, 85.9, 260000, 52000, 1460000, 8.2, 6, 121000, [7, 14, 8, 11, 7, 5, 4, 3, 2, 13]),
+  'INORBIT MALL CAFE': makeDemoDashboard('INORBIT MALL CAFE', 130, 2600000, 96, 2140000, 82.3, 460000, 84000, 1975000, 8.4, 10, 206000, [9, 19, 12, 14, 11, 7, 6, 5, 3, 10]),
+  'BHAYLI CAFE': makeDemoDashboard('BHAYLI CAFE', 80, 1600000, 57, 1180000, 73.8, 420000, 60000, 1090000, 8.3, 5, 102000, [4, 10, 7, 8, 6, 4, 3, 2, 1, 12])
+};
+
+const fields = {
+  userName: document.querySelector('#userName'),
+  userRole: document.querySelector('#userRole'),
+  storeName: document.querySelector('#storeName'),
+  eomLabel: document.querySelector('#eomLabel'),
+  tgtQty: document.querySelector('#tgtQty'),
+  tgtValue: document.querySelector('#tgtValue'),
+  achQty: document.querySelector('#achQty'),
+  achValue: document.querySelector('#achValue'),
+  achValuePercent: document.querySelector('#achValuePercent'),
+  eom: document.querySelector('#eom'),
+  toDoBalance: document.querySelector('#toDoBalance'),
+  drr: document.querySelector('#drr'),
+  lmtd: document.querySelector('#lmtd'),
+  growth: document.querySelector('#growth'),
+  ftdQty: document.querySelector('#ftdQty'),
+  ftdValue: document.querySelector('#ftdValue'),
+  achievementRing: document.querySelector('#achievementRing'),
+  progressBar: document.querySelector('#progressBar')
+};
+
+loginForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  loginMessage.textContent = '';
+  loginButton.disabled = true;
+  loginButton.textContent = 'Signing in...';
+
+  const formData = new FormData(loginForm);
+  const username = String(formData.get('username')).trim();
+  const password = String(formData.get('password'));
+
+  try {
+    const response = await apiRequest('login', { username, password });
+    saveSession(response.session);
+    await loadDashboard();
+  } catch (error) {
+    loginMessage.textContent = error.message;
+  } finally {
+    loginButton.disabled = false;
+    loginButton.textContent = 'Sign in';
+  }
+});
+
+logoutButton.addEventListener('click', () => {
+  localStorage.removeItem(SESSION_KEY);
+  showLogin();
+});
+
+demoButton.addEventListener('click', () => {
+  document.querySelector('#username').value = 'KUNJ11';
+  document.querySelector('#password').value = 'sk@001';
+  loginForm.requestSubmit();
+});
+
+window.addEventListener('load', () => {
+  const session = getSession();
+  if (session?.token) {
+    loadDashboard().catch(() => showLogin());
+  }
+});
+
+async function loadDashboard() {
+  dashboardMessage.textContent = '';
+  const session = getSession();
+  if (!session?.token) {
+    showLogin();
+    return;
+  }
+
+  const response = await apiRequest('dashboard', { token: session.token });
+  renderDashboard(response.user, response.dashboard);
+  showDashboard();
+}
+
+function renderDashboard(user, dashboard) {
+  const achievement = Number(dashboard.achValuePercent || 0);
+  const clampedAchievement = Math.max(0, Math.min(achievement, 100));
+
+  fields.userName.textContent = user.displayName;
+  fields.userRole.textContent = user.role || 'Store user';
+  fields.storeName.textContent = dashboard.storeName;
+  fields.eomLabel.textContent = `EOM: ${formatValue(dashboard.eom)}`;
+  fields.tgtQty.textContent = formatNumber(dashboard.tgtQty);
+  fields.tgtValue.textContent = formatCurrency(dashboard.tgtValue);
+  fields.achQty.textContent = formatNumber(dashboard.achQty);
+  fields.achValue.textContent = formatCurrency(dashboard.achValue);
+  fields.achValuePercent.textContent = `${achievement.toFixed(1)}%`;
+  fields.eom.textContent = formatValue(dashboard.eom);
+  fields.toDoBalance.textContent = formatCurrency(dashboard.toDoBalance);
+  fields.drr.textContent = formatCurrency(dashboard.drr);
+  fields.lmtd.textContent = formatCurrency(dashboard.lmtd);
+  fields.growth.textContent = `${Number(dashboard.growth || 0).toFixed(1)}%`;
+  fields.ftdQty.textContent = formatNumber(dashboard.ftdQty);
+  fields.ftdValue.textContent = formatCurrency(dashboard.ftdValue);
+  fields.achievementRing.textContent = `${achievement.toFixed(0)}%`;
+  fields.achievementRing.parentElement.style.setProperty('--score', `${clampedAchievement}%`);
+  fields.progressBar.style.width = `${clampedAchievement}%`;
+
+  renderBrandSales(dashboard.brands || {});
+  renderAdminRows(dashboard.stores || []);
+}
+
+async function apiRequest(action, payload) {
+  if (!API_URL || API_URL.includes('PASTE_YOUR')) {
+    return demoApiRequest(action, payload);
+  }
+
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
+    body: JSON.stringify({ action, ...payload })
+  });
+
+  if (!response.ok) {
+    throw new Error('Unable to reach the dashboard service.');
+  }
+
+  const data = await response.json();
+  if (!data.ok) {
+    throw new Error(data.error || 'Request failed.');
+  }
+
+  return data;
+}
+
+async function demoApiRequest(action, payload) {
+  await new Promise((resolve) => setTimeout(resolve, 320));
+
+  if (action === 'login') {
+    const username = String(payload.username || '').trim().toLowerCase();
+    const user = demoUsers[username];
+
+    if (!user || user.password !== payload.password) {
+      throw new Error('Invalid username or password.');
+    }
+
+    return {
+      ok: true,
+      session: {
+        token: `demo:${username}`,
+        displayName: user.displayName,
+        expiresInSeconds: 14400
+      }
+    };
+  }
+
+  if (action === 'dashboard') {
+    const username = String(payload.token || '').replace('demo:', '');
+    const user = demoUsers[username];
+
+    if (!user) {
+      throw new Error('Session expired. Please sign in again.');
+    }
+
+    const dashboard = user.access === 'admin'
+      ? makeAdminDashboard(Object.values(demoSales))
+      : { ...demoSales[user.storeId] };
+
+    return {
+      ok: true,
+      user: {
+        displayName: user.displayName,
+        role: user.role
+      },
+      dashboard
+    };
+  }
+
+  throw new Error('Unknown action.');
+}
+
+function makeDemoDashboard(storeName, tgtQty, tgtValue, achQty, achValue, achValuePercent, toDoBalance, drr, lmtd, growth, ftdQty, ftdValue, brandValues) {
+  return {
+    storeName,
+    tgtQty,
+    tgtValue,
+    achQty,
+    achValue,
+    achValuePercent,
+    eom: 'June 2026',
+    toDoBalance,
+    drr,
+    lmtd,
+    growth,
+    ftdQty,
+    ftdValue,
+    brands: makeBrandMap(brandValues)
+  };
+}
+
+function makeAdminDashboard(stores) {
+  const totals = stores.reduce((summary, store) => {
+    summary.tgtQty += Number(store.tgtQty || 0);
+    summary.tgtValue += Number(store.tgtValue || 0);
+    summary.achQty += Number(store.achQty || 0);
+    summary.achValue += Number(store.achValue || 0);
+    summary.toDoBalance += Number(store.toDoBalance || 0);
+    summary.drr += Number(store.drr || 0);
+    summary.lmtd += Number(store.lmtd || 0);
+    summary.ftdQty += Number(store.ftdQty || 0);
+    summary.ftdValue += Number(store.ftdValue || 0);
+    brands.forEach((brand) => {
+      summary.brands[brand] += Number(store.brands?.[brand] || 0);
+    });
+    return summary;
+  }, {
+    storeName: 'All Stores',
+    tgtQty: 0,
+    tgtValue: 0,
+    achQty: 0,
+    achValue: 0,
+    toDoBalance: 0,
+    drr: 0,
+    lmtd: 0,
+    ftdQty: 0,
+    ftdValue: 0,
+    brands: makeBrandMap()
+  });
+
+  totals.achValuePercent = totals.tgtValue > 0 ? (totals.achValue / totals.tgtValue) * 100 : 0;
+  totals.growth = totals.lmtd > 0 ? ((totals.achValue - totals.lmtd) / totals.lmtd) * 100 : 0;
+  totals.eom = stores[0]?.eom || '-';
+  totals.stores = stores;
+  return totals;
+}
+
+function renderAdminRows(stores) {
+  if (!stores.length) {
+    adminPanel.classList.add('is-hidden');
+    adminRows.innerHTML = '';
+    return;
+  }
+
+  adminPanel.classList.remove('is-hidden');
+  adminRows.innerHTML = stores.map((store) => {
+    return `
+      <tr>
+        <td>${escapeHtml(store.storeName)}</td>
+        <td>${formatCurrency(store.tgtValue)}</td>
+        <td>${formatCurrency(store.achValue)}</td>
+        <td>${Number(store.achValuePercent || 0).toFixed(1)}%</td>
+        <td>${formatCurrency(store.toDoBalance)}</td>
+        <td>${formatCurrency(store.drr)}</td>
+        <td>${Number(store.growth || 0).toFixed(1)}%</td>
+        <td>${formatCurrency(store.ftdValue)}</td>
+        ${brands.map((brand) => `<td>${formatNumber(store.brands?.[brand])}</td>`).join('')}
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderBrandSales(brandSales) {
+  brandGrid.innerHTML = brands.map((brand) => {
+    return `
+      <article class="brand-item">
+        <span>${escapeHtml(brand)}</span>
+        <strong>${formatNumber(brandSales[brand])}</strong>
+      </article>
+    `;
+  }).join('');
+}
+
+function makeBrandMap(values = []) {
+  return brands.reduce((record, brand, index) => {
+    record[brand] = Number(values[index] || 0);
+    return record;
+  }, {});
+}
+
+function saveSession(session) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+}
+
+function getSession() {
+  try {
+    return JSON.parse(localStorage.getItem(SESSION_KEY));
+  } catch {
+    return null;
+  }
+}
+
+function showDashboard() {
+  loginView.classList.add('is-hidden');
+  dashboardView.classList.remove('is-hidden');
+}
+
+function showLogin() {
+  dashboardView.classList.add('is-hidden');
+  loginView.classList.remove('is-hidden');
+  adminPanel.classList.add('is-hidden');
+  loginForm.reset();
+}
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0
+  }).format(Number(value || 0));
+}
+
+function formatNumber(value) {
+  return Number(value || 0).toLocaleString('en-IN');
+}
+
+function formatValue(value) {
+  return value === undefined || value === null || value === '' ? '-' : String(value);
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, (character) => {
+    return {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    }[character];
+  });
+}

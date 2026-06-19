@@ -1,0 +1,491 @@
+:root {
+  --bg: #f4f7fb;
+  --panel: #ffffff;
+  --ink: #17202e;
+  --muted: #667085;
+  --line: #d9e1ea;
+  --accent: #0f8b8d;
+  --accent-strong: #0b6f72;
+  --gold: #f5a524;
+  --danger: #c2410c;
+  --shadow: 0 24px 70px rgba(27, 39, 58, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(15, 139, 141, 0.16), transparent 34rem),
+    linear-gradient(135deg, #f9fbfd 0%, var(--bg) 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.login-layout {
+  min-height: calc(100vh - 64px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+  gap: 24px;
+  align-items: center;
+}
+
+.brand-panel,
+.login-card,
+.metric-card,
+.status-panel,
+.admin-panel,
+.brand-panel-section,
+.hero-band {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(217, 225, 234, 0.85);
+  box-shadow: var(--shadow);
+}
+
+.brand-panel {
+  min-height: 540px;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 8px;
+  background:
+    linear-gradient(150deg, rgba(15, 139, 141, 0.92), rgba(22, 32, 46, 0.94)),
+    url("https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=80");
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.brand-mark {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 72px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+.eyebrow,
+.label {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.brand-panel .eyebrow,
+.brand-panel .intro {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+.brand-panel h1 {
+  max-width: 620px;
+  margin-bottom: 18px;
+  font-size: clamp(2.8rem, 7vw, 5.8rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.intro {
+  max-width: 560px;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.signal-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.signal-grid span {
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.login-card {
+  padding: 34px;
+  border-radius: 8px;
+}
+
+.login-card h2 {
+  margin-bottom: 28px;
+  font-size: 2rem;
+}
+
+label {
+  display: block;
+  margin: 18px 0 8px;
+  color: #344054;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: #fbfcfe;
+  outline: none;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(15, 139, 141, 0.14);
+}
+
+button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+#loginButton {
+  width: 100%;
+  margin-top: 26px;
+  color: #fff;
+  background: var(--accent);
+}
+
+#loginButton:hover,
+.secondary-button:hover {
+  background: var(--accent-strong);
+}
+
+.demo-button {
+  width: 100%;
+  margin-top: 12px;
+  color: var(--accent-strong);
+  border: 1px solid rgba(15, 139, 141, 0.32);
+  background: rgba(15, 139, 141, 0.08);
+}
+
+.demo-button:hover {
+  background: rgba(15, 139, 141, 0.14);
+}
+
+.demo-note {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.68;
+}
+
+.message {
+  min-height: 22px;
+  margin: 16px 0 0;
+  color: var(--danger);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.dashboard {
+  min-height: calc(100vh - 64px);
+}
+
+.is-hidden {
+  display: none;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-pill {
+  min-width: 170px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.user-pill span,
+.user-pill small {
+  display: block;
+}
+
+.user-pill span {
+  font-weight: 800;
+}
+
+.user-pill small {
+  color: var(--muted);
+}
+
+.secondary-button {
+  padding: 0 18px;
+  color: #fff;
+  background: #17202e;
+}
+
+.hero-band {
+  min-height: 230px;
+  padding: 34px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  overflow: hidden;
+}
+
+.hero-band h2 {
+  margin-bottom: 8px;
+  font-size: clamp(2rem, 6vw, 4.6rem);
+  line-height: 1;
+}
+
+.achievement-ring {
+  --score: 0%;
+  width: clamp(132px, 22vw, 190px);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) var(--score), #e7edf4 0);
+}
+
+.achievement-ring span {
+  width: 74%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  font-size: clamp(1.5rem, 4vw, 2.45rem);
+  font-weight: 800;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.metric-card {
+  min-height: 146px;
+  padding: 24px;
+  border-radius: 8px;
+}
+
+.metric-card strong {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: clamp(1.55rem, 4vw, 2.5rem);
+  line-height: 1.1;
+}
+
+.status-panel {
+  margin-top: 16px;
+  padding: 24px;
+  border-radius: 8px;
+}
+
+.admin-panel,
+.brand-panel-section {
+  margin-top: 16px;
+  padding: 24px;
+  border-radius: 8px;
+}
+
+.section-heading h2 {
+  margin: 0 0 18px;
+  font-size: 1.5rem;
+}
+
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.brand-item {
+  min-height: 92px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfe;
+}
+
+.brand-item span,
+.brand-item strong {
+  display: block;
+}
+
+.brand-item span {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.brand-item strong {
+  font-size: 1.8rem;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  white-space: nowrap;
+}
+
+th {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+td {
+  font-weight: 700;
+}
+
+.progress-track {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e7edf4;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  transition: width 0.3s ease;
+}
+
+@media (max-width: 880px) {
+  .login-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-panel {
+    min-height: 380px;
+    padding: 32px;
+  }
+
+  .brand-mark {
+    margin-bottom: 48px;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .brand-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .shell {
+    width: min(100% - 20px, 1180px);
+    padding: 10px 0;
+  }
+
+  .login-layout,
+  .dashboard {
+    min-height: calc(100vh - 20px);
+  }
+
+  .brand-panel,
+  .login-card,
+  .hero-band,
+  .metric-card,
+  .status-panel {
+    padding: 22px;
+  }
+
+  .topbar,
+  .topbar-actions,
+  .hero-band {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .user-pill,
+  .secondary-button {
+    width: 100%;
+  }
+
+  .achievement-ring {
+    align-self: center;
+  }
+
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-grid {
+    grid-template-columns: 1fr;
+  }
+}

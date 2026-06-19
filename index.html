@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SK Mobile | Store Performance Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section id="loginView" class="login-layout" aria-labelledby="loginTitle">
+        <div class="brand-panel">
+          <div class="brand-mark" aria-hidden="true">SK</div>
+          <p class="eyebrow">SK Mobile</p>
+          <h1 id="loginTitle">Store Performance Dashboard</h1>
+          <p class="intro">Sign in to review target, achievement, run rate, growth, and daily performance for your assigned store.</p>
+          <div class="signal-grid" aria-label="Dashboard metrics">
+            <span>Targets</span>
+            <span>Achievement</span>
+            <span>Growth</span>
+          </div>
+        </div>
+
+        <form id="loginForm" class="login-card">
+          <div>
+            <p class="eyebrow">Secure Access</p>
+            <h2>Welcome back</h2>
+          </div>
+
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" autocomplete="username" required />
+
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+
+          <button id="loginButton" type="submit">Sign in</button>
+          <button id="demoButton" class="demo-button" type="button">Use KUNJ demo login</button>
+          <p class="demo-note">Demo works until Google Sheets is connected.</p>
+          <p id="loginMessage" class="message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section id="dashboardView" class="dashboard is-hidden" aria-labelledby="dashboardTitle">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">SK Mobile</p>
+            <h1 id="dashboardTitle">Store Performance Dashboard</h1>
+          </div>
+          <div class="topbar-actions">
+            <div class="user-pill">
+              <span id="userName">Username</span>
+              <small id="userRole">Store</small>
+            </div>
+            <button id="logoutButton" class="secondary-button" type="button">Logout</button>
+          </div>
+        </header>
+
+        <section class="hero-band">
+          <div>
+            <span class="label">Assigned Store</span>
+            <h2 id="storeName">-</h2>
+            <p id="eomLabel">EOM: -</p>
+          </div>
+          <div class="achievement-ring" aria-label="Achievement percentage">
+            <span id="achievementRing">0%</span>
+          </div>
+        </section>
+
+        <section class="metric-grid" aria-label="Store metrics">
+          <article class="metric-card"><span class="label">TGT QTY</span><strong id="tgtQty">-</strong></article>
+          <article class="metric-card"><span class="label">TGT VALUE</span><strong id="tgtValue">-</strong></article>
+          <article class="metric-card"><span class="label">ACH QTY</span><strong id="achQty">-</strong></article>
+          <article class="metric-card"><span class="label">ACH VALUE</span><strong id="achValue">-</strong></article>
+          <article class="metric-card"><span class="label">ACH VALUE %</span><strong id="achValuePercent">-</strong></article>
+          <article class="metric-card"><span class="label">EOM</span><strong id="eom">-</strong></article>
+          <article class="metric-card"><span class="label">TO DO BLANCE</span><strong id="toDoBalance">-</strong></article>
+          <article class="metric-card"><span class="label">DRR</span><strong id="drr">-</strong></article>
+          <article class="metric-card"><span class="label">LMTD</span><strong id="lmtd">-</strong></article>
+          <article class="metric-card"><span class="label">GRTH%</span><strong id="growth">-</strong></article>
+          <article class="metric-card"><span class="label">FTD QTY</span><strong id="ftdQty">-</strong></article>
+          <article class="metric-card"><span class="label">FTD VALUE</span><strong id="ftdValue">-</strong></article>
+        </section>
+
+        <section class="status-panel">
+          <div>
+            <span class="label">Progress</span>
+            <div class="progress-track">
+              <div id="progressBar" class="progress-bar"></div>
+            </div>
+          </div>
+          <p id="dashboardMessage" class="message" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="brand-panel-section" aria-labelledby="brandSalesTitle">
+          <div class="section-heading">
+            <span class="label">Brand Wise Sale</span>
+            <h2 id="brandSalesTitle">Mobile and accessories quantity</h2>
+          </div>
+          <div id="brandGrid" class="brand-grid" aria-label="Brand wise sale"></div>
+        </section>
+
+        <section id="adminPanel" class="admin-panel is-hidden" aria-labelledby="adminPanelTitle">
+          <div class="section-heading">
+            <span class="label">Senior View</span>
+            <h2 id="adminPanelTitle">All stores</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Store</th>
+                  <th>TGT VALUE</th>
+                  <th>ACH VALUE</th>
+                  <th>ACH VALUE %</th>
+                  <th>TO DO BLANCE</th>
+                  <th>DRR</th>
+                  <th>GRTH%</th>
+                  <th>FTD VALUE</th>
+                  <th>APPLE</th>
+                  <th>SAMSUNG</th>
+                  <th>MI</th>
+                  <th>VIVO</th>
+                  <th>OPPO</th>
+                  <th>REALME</th>
+                  <th>MOTOROLA</th>
+                  <th>ONE PLUS</th>
+                  <th>OTHERS</th>
+                  <th>ACCESSORIES</th>
+                </tr>
+              </thead>
+              <tbody id="adminRows"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
