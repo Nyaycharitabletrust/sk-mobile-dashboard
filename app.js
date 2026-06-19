@@ -1,4 +1,4 @@
-const API_URL = 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwgsfURccD4hxMGcriec0seV9yUFuENGwO4lvRt0iXXidsMyArOEQW-7E2PT507OiA_/exec';
 const SESSION_KEY = 'store_dashboard_session';
 
 const loginView = document.querySelector('#loginView');
@@ -41,64 +41,64 @@ const demoUsers = {
     password: 'sk@004',
     displayName: 'KBG11',
     role: 'Store Manager',
-    storeId: 'Karelibaug',
-    storeName: 'Karelibaug'
+    storeId: 'KBG',
+    storeName: 'KBG'
   },
   'raj11': {
     password: 'sk@005',
     displayName: 'RAJ11',
     role: 'Store Manager',
-    storeId: 'Rajpipla',
-    storeName: 'Rajpipla'
+    storeId: 'RAJ',
+    storeName: 'RAJ'
   },
   'wag11': {
     password: 'sk@006',
     displayName: 'WAG11',
     role: 'Store Manager',
-    storeId: 'Waghodia',
-    storeName: 'Waghodia'
+    storeId: 'WGH',
+    storeName: 'WGH'
   },
   'vivo11': {
     password: 'sk@007',
     displayName: 'VIVO11',
     role: 'Store Manager',
-    storeId: 'Waghodia Vivo',
-    storeName: 'Waghodia Vivo'
+    storeId: 'VIVO',
+    storeName: 'VIVO'
   },
   'opc11': {
     password: 'sk@008',
     displayName: 'OPC11',
     role: 'Store Manager',
-    storeId: 'OP ROAD CAFE',
-    storeName: 'OP ROAD CAFE'
+    storeId: 'OPC',
+    storeName: 'OPC'
   },
   'opm11': {
     password: 'sk@009',
     displayName: 'OPM11',
     role: 'Store Manager',
-    storeId: 'OP ROAD MBO',
-    storeName: 'OP ROAD MBO'
+    storeId: 'OPM',
+    storeName: 'OPM'
   },
   'alm11': {
     password: 'sk@010',
     displayName: 'ALM11',
     role: 'Store Manager',
-    storeId: 'Alembic',
-    storeName: 'Alembic'
+    storeId: 'ALM',
+    storeName: 'ALM'
   },
   'inc11': {
     password: 'sk@011',
     displayName: 'INC11',
     role: 'Store Manager',
-    storeId: 'INORBIT MALL CAFE',
-    storeName: 'INORBIT MALL CAFE'
+    storeId: 'INC',
+    storeName: 'INC'
   },
   'bhc11': {
     password: 'sk@012',
     displayName: 'BHC11',
     role: 'Store Manager',
-    storeId: 'BHAYLI CAFE',
-    storeName: 'BHAYLI CAFE'
+    storeId: 'BHC',
+    storeName: 'BHC'
   },
   'parth11': {
     password: 'sk@100',
@@ -141,6 +141,12 @@ const demoUsers = {
     displayName: 'Milind11',
     role: 'Senior',
     access: 'admin'
+  },
+  'bhadresh11': {
+    password: 'sk@107',
+    displayName: 'Bhadresh11',
+    role: 'Senior',
+    access: 'admin'
   }
 };
 
@@ -148,15 +154,15 @@ const demoSales = {
   KUNJ: makeDemoDashboard('KUNJ', 110, 2200000, 78, 1650000, 75, 550000, 86000, 1420000, 16, 8, 176000, [6, 14, 9, 11, 8, 5, 4, 3, 2, 16]),
   K10: makeDemoDashboard('K10', 95, 1900000, 62, 1280000, 67.4, 620000, 72000, 1190000, 7.6, 5, 108000, [4, 12, 7, 10, 6, 4, 3, 2, 1, 13]),
   NSK: makeDemoDashboard('NSK', 105, 2100000, 84, 1785000, 85, 315000, 61000, 1610000, 10.9, 7, 151000, [7, 16, 10, 12, 9, 6, 5, 4, 2, 13]),
-  Karelibaug: makeDemoDashboard('Karelibaug', 120, 2400000, 91, 1960000, 81.7, 440000, 80000, 1790000, 9.5, 9, 188000, [8, 18, 11, 13, 10, 7, 5, 4, 3, 12]),
-  Rajpipla: makeDemoDashboard('Rajpipla', 75, 1500000, 48, 930000, 62, 570000, 69000, 870000, 6.9, 4, 82000, [3, 9, 6, 8, 5, 4, 3, 1, 1, 8]),
-  Waghodia: makeDemoDashboard('Waghodia', 88, 1760000, 59, 1215000, 69, 545000, 71000, 1130000, 7.5, 5, 99000, [4, 11, 7, 9, 6, 5, 3, 2, 2, 10]),
-  'Waghodia Vivo': makeDemoDashboard('Waghodia Vivo', 70, 1400000, 52, 1090000, 77.9, 310000, 56000, 980000, 11.2, 4, 84000, [3, 8, 5, 12, 6, 4, 2, 1, 1, 10]),
-  'OP ROAD CAFE': makeDemoDashboard('OP ROAD CAFE', 115, 2300000, 86, 1815000, 78.9, 485000, 76000, 1690000, 7.4, 8, 174000, [8, 17, 10, 12, 9, 6, 5, 4, 2, 13]),
-  'OP ROAD MBO': makeDemoDashboard('OP ROAD MBO', 100, 2000000, 72, 1525000, 76.3, 475000, 68000, 1430000, 6.6, 6, 128000, [6, 15, 9, 10, 8, 5, 4, 3, 2, 10]),
-  Alembic: makeDemoDashboard('Alembic', 92, 1840000, 74, 1580000, 85.9, 260000, 52000, 1460000, 8.2, 6, 121000, [7, 14, 8, 11, 7, 5, 4, 3, 2, 13]),
-  'INORBIT MALL CAFE': makeDemoDashboard('INORBIT MALL CAFE', 130, 2600000, 96, 2140000, 82.3, 460000, 84000, 1975000, 8.4, 10, 206000, [9, 19, 12, 14, 11, 7, 6, 5, 3, 10]),
-  'BHAYLI CAFE': makeDemoDashboard('BHAYLI CAFE', 80, 1600000, 57, 1180000, 73.8, 420000, 60000, 1090000, 8.3, 5, 102000, [4, 10, 7, 8, 6, 4, 3, 2, 1, 12])
+  KBG: makeDemoDashboard('KBG', 120, 2400000, 91, 1960000, 81.7, 440000, 80000, 1790000, 9.5, 9, 188000, [8, 18, 11, 13, 10, 7, 5, 4, 3, 12]),
+  RAJ: makeDemoDashboard('RAJ', 75, 1500000, 48, 930000, 62, 570000, 69000, 870000, 6.9, 4, 82000, [3, 9, 6, 8, 5, 4, 3, 1, 1, 8]),
+  WGH: makeDemoDashboard('WGH', 88, 1760000, 59, 1215000, 69, 545000, 71000, 1130000, 7.5, 5, 99000, [4, 11, 7, 9, 6, 5, 3, 2, 2, 10]),
+  VIVO: makeDemoDashboard('VIVO', 70, 1400000, 52, 1090000, 77.9, 310000, 56000, 980000, 11.2, 4, 84000, [3, 8, 5, 12, 6, 4, 2, 1, 1, 10]),
+  OPC: makeDemoDashboard('OPC', 115, 2300000, 86, 1815000, 78.9, 485000, 76000, 1690000, 7.4, 8, 174000, [8, 17, 10, 12, 9, 6, 5, 4, 2, 13]),
+  OPM: makeDemoDashboard('OPM', 100, 2000000, 72, 1525000, 76.3, 475000, 68000, 1430000, 6.6, 6, 128000, [6, 15, 9, 10, 8, 5, 4, 3, 2, 10]),
+  ALM: makeDemoDashboard('ALM', 92, 1840000, 74, 1580000, 85.9, 260000, 52000, 1460000, 8.2, 6, 121000, [7, 14, 8, 11, 7, 5, 4, 3, 2, 13]),
+  INC: makeDemoDashboard('INC', 130, 2600000, 96, 2140000, 82.3, 460000, 84000, 1975000, 8.4, 10, 206000, [9, 19, 12, 14, 11, 7, 6, 5, 3, 10]),
+  BHC: makeDemoDashboard('BHC', 80, 1600000, 57, 1180000, 73.8, 420000, 60000, 1090000, 8.3, 5, 102000, [4, 10, 7, 8, 6, 4, 3, 2, 1, 12])
 };
 
 const fields = {
