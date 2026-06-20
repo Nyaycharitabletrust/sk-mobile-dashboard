@@ -16,6 +16,7 @@ const seniorControls = document.querySelector('#seniorControls');
 const storeFilter = document.querySelector('#storeFilter');
 
 const brands = ['APPLE', 'SAMSUNG', 'MI', 'VIVO', 'OPPO', 'REALME', 'MOTOROLA', 'ONE PLUS', 'OTHERS', 'ACCESSORIES'];
+const cafeStores = new Set(['INC', 'BHC', 'OPC']);
 let latestDashboard = null;
 let latestUser = null;
 
@@ -233,6 +234,16 @@ storeFilter.addEventListener('change', () => {
     return;
   }
 
+  if (storeFilter.value === '__mbo__') {
+    renderSelectedDashboard(latestUser, makeAdminDashboard(getStoresByType('mbo'), 'All MBO Stores'));
+    return;
+  }
+
+  if (storeFilter.value === '__cafe__') {
+    renderSelectedDashboard(latestUser, makeAdminDashboard(getStoresByType('cafe'), 'All CAFE Stores'));
+    return;
+  }
+
   const selectedStore = latestDashboard.stores[Number(storeFilter.value)];
   if (selectedStore) {
     renderSelectedDashboard(latestUser, { ...selectedStore });
@@ -304,6 +315,8 @@ function setupSeniorControls(dashboard) {
   seniorControls.classList.remove('is-hidden');
   storeFilter.innerHTML = [
     '<option value="__all__">All Stores</option>',
+    '<option value="__mbo__">All MBO Stores</option>',
+    '<option value="__cafe__">All CAFE Stores</option>',
     ...dashboard.stores.map((store, index) => {
       return `<option value="${index}">${escapeHtml(store.storeName)}</option>`;
     })
@@ -401,7 +414,7 @@ function makeDemoDashboard(storeName, tgtQty, tgtValue, achQty, achValue, achVal
   };
 }
 
-function makeAdminDashboard(stores) {
+function makeAdminDashboard(stores, storeName = 'All Stores') {
   const totals = stores.reduce((summary, store) => {
     summary.tgtQty += Number(store.tgtQty || 0);
     summary.tgtValue += Number(store.tgtValue || 0);
@@ -417,7 +430,7 @@ function makeAdminDashboard(stores) {
     });
     return summary;
   }, {
-    storeName: 'All Stores',
+    storeName,
     tgtQty: 0,
     tgtValue: 0,
     achQty: 0,
@@ -435,6 +448,18 @@ function makeAdminDashboard(stores) {
   totals.eom = stores[0]?.eom || '-';
   totals.stores = stores;
   return totals;
+}
+
+function getStoresByType(type) {
+  if (!latestDashboard?.stores?.length) {
+    return [];
+  }
+
+  return latestDashboard.stores.filter((store) => {
+    const storeName = String(store.storeName || '').trim().toUpperCase();
+    const isCafe = cafeStores.has(storeName);
+    return type === 'cafe' ? isCafe : !isCafe;
+  });
 }
 
 function renderAdminRows(stores) {
