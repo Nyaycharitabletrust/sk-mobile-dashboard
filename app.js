@@ -12,8 +12,12 @@ const logoutButton = document.querySelector('#logoutButton');
 const adminPanel = document.querySelector('#adminPanel');
 const adminRows = document.querySelector('#adminRows');
 const brandGrid = document.querySelector('#brandGrid');
+const seniorControls = document.querySelector('#seniorControls');
+const storeFilter = document.querySelector('#storeFilter');
 
 const brands = ['APPLE', 'SAMSUNG', 'MI', 'VIVO', 'OPPO', 'REALME', 'MOTOROLA', 'ONE PLUS', 'OTHERS', 'ACCESSORIES'];
+let latestDashboard = null;
+let latestUser = null;
 
 const demoUsers = {
   'kunj11': {
@@ -219,6 +223,22 @@ demoButton.addEventListener('click', () => {
   loginForm.requestSubmit();
 });
 
+storeFilter.addEventListener('change', () => {
+  if (!latestDashboard?.stores?.length || !latestUser) {
+    return;
+  }
+
+  if (storeFilter.value === '__all__') {
+    renderSelectedDashboard(latestUser, makeAdminDashboard(latestDashboard.stores));
+    return;
+  }
+
+  const selectedStore = latestDashboard.stores[Number(storeFilter.value)];
+  if (selectedStore) {
+    renderSelectedDashboard(latestUser, { ...selectedStore });
+  }
+});
+
 window.addEventListener('load', () => {
   const session = getSession();
   if (session?.token) {
@@ -240,6 +260,13 @@ async function loadDashboard() {
 }
 
 function renderDashboard(user, dashboard) {
+  latestUser = user;
+  latestDashboard = dashboard;
+  setupSeniorControls(dashboard);
+  renderSelectedDashboard(user, dashboard);
+}
+
+function renderSelectedDashboard(user, dashboard) {
   const achievement = Number(dashboard.achValuePercent || 0);
   const clampedAchievement = Math.max(0, Math.min(achievement, 100));
 
@@ -265,6 +292,23 @@ function renderDashboard(user, dashboard) {
 
   renderBrandSales(dashboard.brands || {});
   renderAdminRows(dashboard.stores || []);
+}
+
+function setupSeniorControls(dashboard) {
+  if (!dashboard.stores?.length) {
+    seniorControls.classList.add('is-hidden');
+    storeFilter.innerHTML = '<option value="__all__">All Stores</option>';
+    return;
+  }
+
+  seniorControls.classList.remove('is-hidden');
+  storeFilter.innerHTML = [
+    '<option value="__all__">All Stores</option>',
+    ...dashboard.stores.map((store, index) => {
+      return `<option value="${index}">${escapeHtml(store.storeName)}</option>`;
+    })
+  ].join('');
+  storeFilter.value = '__all__';
 }
 
 async function apiRequest(action, payload) {
@@ -457,6 +501,9 @@ function showLogin() {
   dashboardView.classList.add('is-hidden');
   loginView.classList.remove('is-hidden');
   adminPanel.classList.add('is-hidden');
+  seniorControls.classList.add('is-hidden');
+  latestDashboard = null;
+  latestUser = null;
   loginForm.reset();
 }
 
