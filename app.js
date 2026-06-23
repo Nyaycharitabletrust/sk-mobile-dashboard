@@ -220,11 +220,13 @@ logoutButton.addEventListener('click', () => {
   showLogin();
 });
 
-demoButton.addEventListener('click', () => {
-  document.querySelector('#username').value = 'KUNJ11';
-  document.querySelector('#password').value = 'sk@001';
-  loginForm.requestSubmit();
-});
+if (demoButton) {
+  demoButton.addEventListener('click', () => {
+    document.querySelector('#username').value = 'KUNJ11';
+    document.querySelector('#password').value = 'sk@001';
+    loginForm.requestSubmit();
+  });
+}
 
 storeFilter.addEventListener('change', () => {
   if (!latestDashboard?.stores?.length || !latestUser) {
