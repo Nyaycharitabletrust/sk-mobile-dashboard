@@ -17,6 +17,7 @@ const storeFilter = document.querySelector('#storeFilter');
 
 const brands = ['APPLE', 'SAMSUNG', 'MI', 'VIVO', 'OPPO', 'REALME', 'MOTOROLA', 'ONE PLUS', 'OTHERS', 'ACCESSORIES'];
 const cafeStores = new Set(['INC', 'BHC', 'OPC']);
+const standaloneStores = new Set(['VIVO']);
 const brandSumFields = ['tgtQty', 'tgtValue', 'achQty', 'achValue', 'eom', 'toDoBalance', 'drr', 'lmtd', 'ftdQty', 'ftdValue'];
 let latestDashboard = null;
 let latestUser = null;
@@ -463,7 +464,8 @@ function getStoresByType(type) {
   return latestDashboard.stores.filter((store) => {
     const storeName = String(store.storeName || '').trim().toUpperCase();
     const isCafe = cafeStores.has(storeName);
-    return type === 'cafe' ? isCafe : !isCafe;
+    const isStandalone = standaloneStores.has(storeName);
+    return type === 'cafe' ? isCafe : !isCafe && !isStandalone;
   });
 }
 
