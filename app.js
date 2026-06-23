@@ -231,17 +231,17 @@ storeFilter.addEventListener('change', () => {
   }
 
   if (storeFilter.value === '__all__') {
-    renderSelectedDashboard(latestUser, makeAdminDashboard(latestDashboard.stores));
+    renderSelectedDashboard(latestUser, getAggregateDashboard('all'));
     return;
   }
 
   if (storeFilter.value === '__mbo__') {
-    renderSelectedDashboard(latestUser, makeAdminDashboard(getStoresByType('mbo'), 'All MBO Stores'));
+    renderSelectedDashboard(latestUser, getAggregateDashboard('mbo'));
     return;
   }
 
   if (storeFilter.value === '__cafe__') {
-    renderSelectedDashboard(latestUser, makeAdminDashboard(getStoresByType('cafe'), 'All CAFE Stores'));
+    renderSelectedDashboard(latestUser, getAggregateDashboard('cafe'));
     return;
   }
 
@@ -465,6 +465,26 @@ function getStoresByType(type) {
     const isCafe = cafeStores.has(storeName);
     return type === 'cafe' ? isCafe : !isCafe;
   });
+}
+
+function getAggregateDashboard(type) {
+  const aggregate = latestDashboard?.aggregates?.[type];
+  if (aggregate) {
+    return {
+      ...aggregate,
+      stores: type === 'all' ? latestDashboard.stores : []
+    };
+  }
+
+  if (type === 'mbo') {
+    return makeAdminDashboard(getStoresByType('mbo'), 'All MBO Stores');
+  }
+
+  if (type === 'cafe') {
+    return makeAdminDashboard(getStoresByType('cafe'), 'All CAFE Stores');
+  }
+
+  return makeAdminDashboard(latestDashboard.stores || []);
 }
 
 function renderAdminRows(stores) {
