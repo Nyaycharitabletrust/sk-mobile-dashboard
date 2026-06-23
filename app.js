@@ -17,6 +17,7 @@ const storeFilter = document.querySelector('#storeFilter');
 
 const brands = ['APPLE', 'SAMSUNG', 'MI', 'VIVO', 'OPPO', 'REALME', 'MOTOROLA', 'ONE PLUS', 'OTHERS', 'ACCESSORIES'];
 const cafeStores = new Set(['INC', 'BHC', 'OPC']);
+const brandSumFields = ['tgtQty', 'tgtValue', 'achQty', 'achValue', 'eom', 'toDoBalance', 'drr', 'lmtd', 'ftdQty', 'ftdValue'];
 let latestDashboard = null;
 let latestUser = null;
 
@@ -301,7 +302,7 @@ function renderSelectedDashboard(user, dashboard) {
   fields.achievementRing.parentElement.style.setProperty('--score', `${clampedAchievement}%`);
   fields.progressBar.style.width = `${clampedAchievement}%`;
 
-  renderBrandSales(dashboard.brands || {});
+  renderBrandSales(dashboard.brandRows || makeBrandRowsFromMap(dashboard.brands || {}));
   renderAdminRows(dashboard.stores || []);
 }
 
@@ -410,7 +411,8 @@ function makeDemoDashboard(storeName, tgtQty, tgtValue, achQty, achValue, achVal
     growth,
     ftdQty,
     ftdValue,
-    brands: makeBrandMap(brandValues)
+    brands: makeBrandMap(brandValues),
+    brandRows: makeDemoBrandRows(brandValues, tgtValue, achValue, lmtd, ftdQty, ftdValue)
   };
 }
 
@@ -428,6 +430,7 @@ function makeAdminDashboard(stores, storeName = 'All Stores') {
     brands.forEach((brand) => {
       summary.brands[brand] += Number(store.brands?.[brand] || 0);
     });
+    summary.brandRows = aggregateBrandRows(summary.brandRows, store.brandRows || makeBrandRowsFromMap(store.brands || {}));
     return summary;
   }, {
     storeName,
@@ -440,11 +443,13 @@ function makeAdminDashboard(stores, storeName = 'All Stores') {
     lmtd: 0,
     ftdQty: 0,
     ftdValue: 0,
-    brands: makeBrandMap()
+    brands: makeBrandMap(),
+    brandRows: makeEmptyBrandRows()
   });
 
   totals.achValuePercent = totals.tgtValue > 0 ? (totals.achValue / totals.tgtValue) * 100 : 0;
   totals.growth = totals.lmtd > 0 ? ((totals.achValue - totals.lmtd) / totals.lmtd) * 100 : 0;
+  totals.brandRows = totals.brandRows.map(recalculateBrandPercentages);
   totals.eom = stores[0]?.eom || '-';
   totals.stores = stores;
   return totals;
@@ -487,15 +492,50 @@ function renderAdminRows(stores) {
   }).join('');
 }
 
-function renderBrandSales(brandSales) {
-  brandGrid.innerHTML = brands.map((brand) => {
-    return `
-      <article class="brand-item">
-        <span>${escapeHtml(brand)}</span>
-        <strong>${formatNumber(brandSales[brand])}</strong>
-      </article>
-    `;
-  }).join('');
+function renderBrandSales(brandRows) {
+  const rows = normalizeBrandRows(brandRows);
+  brandGrid.innerHTML = `
+    <div class="table-wrap">
+      <table class="brand-table">
+        <thead>
+          <tr>
+            <th>Brand</th>
+            <th>TGT QTY</th>
+            <th>TGT VALUE</th>
+            <th>FTD QTY</th>
+            <th>FTD VALUE</th>
+            <th>ACH QTY</th>
+            <th>ACH VALUE</th>
+            <th>ACH VALUE %</th>
+            <th>EOM</th>
+            <th>TO DO BLANCE</th>
+            <th>DRR</th>
+            <th>LMTD</th>
+            <th>GRTH%</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((row) => `
+            <tr>
+              <td>${escapeHtml(row.brand)}</td>
+              <td>${formatNumber(row.tgtQty)}</td>
+              <td>${formatCurrency(row.tgtValue)}</td>
+              <td>${formatNumber(row.ftdQty)}</td>
+              <td>${formatCurrency(row.ftdValue)}</td>
+              <td>${formatNumber(row.achQty)}</td>
+              <td>${formatCurrency(row.achValue)}</td>
+              <td>${Number(row.achValuePercent || 0).toFixed(1)}%</td>
+              <td>${formatCurrency(row.eom)}</td>
+              <td>${formatCurrency(row.toDoBalance)}</td>
+              <td>${formatCurrency(row.drr)}</td>
+              <td>${formatCurrency(row.lmtd)}</td>
+              <td>${Number(row.growth || 0).toFixed(1)}%</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
 
 function makeBrandMap(values = []) {
@@ -503,6 +543,119 @@ function makeBrandMap(values = []) {
     record[brand] = Number(values[index] || 0);
     return record;
   }, {});
+}
+
+function makeEmptyBrandRows() {
+  return brands.map((brand) => ({
+    brand,
+    tgtQty: 0,
+    tgtValue: 0,
+    achQty: 0,
+    achValue: 0,
+    achValuePercent: 0,
+    eom: 0,
+    toDoBalance: 0,
+    drr: 0,
+    lmtd: 0,
+    growth: 0,
+    ftdQty: 0,
+    ftdValue: 0
+  }));
+}
+
+function makeBrandRowsFromMap(brandSales = {}) {
+  return brands.map((brand) => ({
+    brand,
+    tgtQty: 0,
+    tgtValue: 0,
+    achQty: Number(brandSales[brand] || 0),
+    achValue: 0,
+    achValuePercent: 0,
+    eom: 0,
+    toDoBalance: 0,
+    drr: 0,
+    lmtd: 0,
+    growth: 0,
+    ftdQty: 0,
+    ftdValue: 0
+  }));
+}
+
+function makeDemoBrandRows(brandValues = [], tgtValue = 0, achValue = 0, lmtd = 0, ftdQty = 0, ftdValue = 0) {
+  const totalBrandQty = brandValues.reduce((total, value) => total + Number(value || 0), 0);
+  return brands.map((brand, index) => {
+    const achQty = Number(brandValues[index] || 0);
+    const share = totalBrandQty > 0 ? achQty / totalBrandQty : 0;
+    const brandTgtValue = Math.round(Number(tgtValue || 0) * share);
+    const brandAchValue = Math.round(Number(achValue || 0) * share);
+    const brandLmtd = Math.round(Number(lmtd || 0) * share);
+    return recalculateBrandPercentages({
+      brand,
+      tgtQty: Math.round(totalBrandQty * share * 1.25),
+      tgtValue: brandTgtValue,
+      achQty,
+      achValue: brandAchValue,
+      achValuePercent: 0,
+      eom: brandAchValue,
+      toDoBalance: Math.max(brandTgtValue - brandAchValue, 0),
+      drr: 0,
+      lmtd: brandLmtd,
+      growth: 0,
+      ftdQty: Math.round(Number(ftdQty || 0) * share),
+      ftdValue: Math.round(Number(ftdValue || 0) * share)
+    });
+  });
+}
+
+function aggregateBrandRows(summaryRows, storeRows) {
+  const rowsByBrand = normalizeBrandRows(storeRows).reduce((record, row) => {
+    record[String(row.brand || '').toUpperCase()] = row;
+    return record;
+  }, {});
+
+  return summaryRows.map((summaryRow) => {
+    const storeRow = rowsByBrand[String(summaryRow.brand || '').toUpperCase()];
+    if (!storeRow) {
+      return summaryRow;
+    }
+
+    brandSumFields.forEach((field) => {
+      summaryRow[field] += Number(storeRow[field] || 0);
+    });
+    return summaryRow;
+  });
+}
+
+function normalizeBrandRows(rows = []) {
+  const rowsByBrand = rows.reduce((record, row) => {
+    record[String(row.brand || '').toUpperCase()] = row;
+    return record;
+  }, {});
+
+  return brands.map((brand) => {
+    const row = rowsByBrand[brand] || {};
+    return {
+      brand,
+      tgtQty: Number(row.tgtQty || 0),
+      tgtValue: Number(row.tgtValue || 0),
+      achQty: Number(row.achQty || 0),
+      achValue: Number(row.achValue || 0),
+      achValuePercent: Number(row.achValuePercent || 0),
+      eom: Number(row.eom || 0),
+      toDoBalance: Number(row.toDoBalance || 0),
+      drr: Number(row.drr || 0),
+      lmtd: Number(row.lmtd || 0),
+      growth: Number(row.growth || 0),
+      ftdQty: Number(row.ftdQty || 0),
+      ftdValue: Number(row.ftdValue || 0)
+    };
+  });
+}
+
+function recalculateBrandPercentages(row) {
+  row.achValuePercent = row.tgtValue > 0 ? (row.achValue / row.tgtValue) * 100 : 0;
+  row.growth = row.lmtd > 0 ? ((row.achValue - row.lmtd) / row.lmtd) * 100 : 0;
+  return row;
 }
 
 function saveSession(session) {

@@ -416,6 +416,29 @@ button:disabled {
   font-size: 1.8rem;
 }
 
+.brand-breakdown .table-wrap {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfe;
+}
+
+.brand-table {
+  min-width: 1280px;
+}
+
+.brand-table td:first-child,
+.brand-table th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #fbfcfe;
+}
+
+.brand-table td:nth-child(8),
+.brand-table td:nth-child(13) {
+  color: var(--accent-strong);
+}
+
 .table-wrap {
   width: 100%;
   overflow-x: auto;
