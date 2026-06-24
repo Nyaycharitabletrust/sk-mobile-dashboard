@@ -288,17 +288,18 @@ function renderSelectedDashboard(user, dashboard) {
   fields.userName.textContent = user.displayName;
   fields.userRole.textContent = user.role || 'Store user';
   fields.storeName.textContent = dashboard.storeName;
-  fields.eomLabel.textContent = `EOM: ${formatValue(dashboard.eom)}`;
+  fields.eomLabel.textContent = `EOM: ${formatNumber(dashboard.eom)}`;
   fields.tgtQty.textContent = formatNumber(dashboard.tgtQty);
   fields.tgtValue.textContent = formatCurrency(dashboard.tgtValue);
   fields.achQty.textContent = formatNumber(dashboard.achQty);
   fields.achValue.textContent = formatCurrency(dashboard.achValue);
   fields.achValuePercent.textContent = `${achievement.toFixed(1)}%`;
-  fields.eom.textContent = formatValue(dashboard.eom);
+  fields.eom.textContent = formatNumber(dashboard.eom);
   fields.toDoBalance.textContent = formatCurrency(dashboard.toDoBalance);
   fields.drr.textContent = formatCurrency(dashboard.drr);
   fields.lmtd.textContent = formatCurrency(dashboard.lmtd);
   fields.growth.textContent = `${Number(dashboard.growth || 0).toFixed(1)}%`;
+  setTrendClass(fields.growth, dashboard.growth);
   fields.ftdQty.textContent = formatNumber(dashboard.ftdQty);
   fields.ftdValue.textContent = formatCurrency(dashboard.ftdValue);
   fields.achievementRing.textContent = `${achievement.toFixed(0)}%`;
@@ -503,13 +504,18 @@ function renderAdminRows(stores) {
     return `
       <tr>
         <td>${escapeHtml(store.storeName)}</td>
+        <td>${formatNumber(store.tgtQty)}</td>
         <td>${formatCurrency(store.tgtValue)}</td>
+        <td>${formatNumber(store.ftdQty)}</td>
+        <td>${formatCurrency(store.ftdValue)}</td>
+        <td>${formatNumber(store.achQty)}</td>
         <td>${formatCurrency(store.achValue)}</td>
         <td>${Number(store.achValuePercent || 0).toFixed(1)}%</td>
+        <td>${formatNumber(store.eom)}</td>
         <td>${formatCurrency(store.toDoBalance)}</td>
         <td>${formatCurrency(store.drr)}</td>
-        <td>${Number(store.growth || 0).toFixed(1)}%</td>
-        <td>${formatCurrency(store.ftdValue)}</td>
+        <td>${formatCurrency(store.lmtd)}</td>
+        <td class="${getTrendClass(store.growth)}">${Number(store.growth || 0).toFixed(1)}%</td>
         ${brands.map((brand) => `<td>${formatNumber(store.brands?.[brand])}</td>`).join('')}
       </tr>
     `;
@@ -528,8 +534,8 @@ function renderBrandSales(brandRows) {
             <th>TGT VALUE</th>
             <th>FTD QTY</th>
             <th>FTD VALUE</th>
-            <th>ACH QTY</th>
-            <th>ACH VALUE</th>
+            <th>ACH QTY(MTD)</th>
+            <th>ACH VALUE(MTD)</th>
             <th>ACH VALUE %</th>
             <th>EOM</th>
             <th>TO DO BLANCE</th>
@@ -553,7 +559,7 @@ function renderBrandSales(brandRows) {
               <td>${formatCurrency(row.toDoBalance)}</td>
               <td>${formatCurrency(row.drr)}</td>
               <td>${formatCurrency(row.lmtd)}</td>
-              <td>${Number(row.growth || 0).toFixed(1)}%</td>
+              <td class="${getTrendClass(row.growth)}">${Number(row.growth || 0).toFixed(1)}%</td>
             </tr>
           `).join('')}
         </tbody>
@@ -723,6 +729,24 @@ function formatNumber(value) {
 
 function formatValue(value) {
   return value === undefined || value === null || value === '' ? '-' : String(value);
+}
+
+function getTrendClass(value) {
+  const number = Number(value || 0);
+  if (number > 0) {
+    return 'trend-positive';
+  }
+
+  if (number < 0) {
+    return 'trend-negative';
+  }
+
+  return 'trend-neutral';
+}
+
+function setTrendClass(element, value) {
+  element.classList.remove('trend-positive', 'trend-negative', 'trend-neutral');
+  element.classList.add(getTrendClass(value));
 }
 
 function escapeHtml(value) {

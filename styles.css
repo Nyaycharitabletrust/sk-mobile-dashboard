@@ -439,6 +439,18 @@ button:disabled {
   color: var(--accent-strong);
 }
 
+.trend-positive {
+  color: #15803d !important;
+}
+
+.trend-negative {
+  color: #b42318 !important;
+}
+
+.trend-neutral {
+  color: var(--ink);
+}
+
 .table-wrap {
   width: 100%;
   overflow-x: auto;
