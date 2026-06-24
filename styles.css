@@ -1,14 +1,16 @@
 :root {
-  --bg: #f4f7fb;
+  --bg: #eef3f8;
   --panel: #ffffff;
   --ink: #17202e;
   --muted: #667085;
-  --line: #d9e1ea;
-  --accent: #0f8b8d;
-  --accent-strong: #0b6f72;
-  --gold: #f5a524;
+  --line: #d7e0ea;
+  --accent: #0b7285;
+  --accent-strong: #075866;
+  --navy: #102033;
+  --soft-accent: #e7f5f7;
+  --gold: #d99a22;
   --danger: #c2410c;
-  --shadow: 0 24px 70px rgba(27, 39, 58, 0.14);
+  --shadow: 0 14px 34px rgba(27, 39, 58, 0.09);
 }
 
 * {
@@ -21,8 +23,7 @@ body {
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
   background:
-    radial-gradient(circle at top left, rgba(15, 139, 141, 0.16), transparent 34rem),
-    linear-gradient(135deg, #f9fbfd 0%, var(--bg) 100%);
+    linear-gradient(180deg, #f8fbfd 0%, var(--bg) 100%);
 }
 
 button,
@@ -32,9 +33,9 @@ select {
 }
 
 .shell {
-  width: min(1180px, calc(100% - 32px));
+  width: min(1320px, calc(100% - 28px));
   margin: 0 auto;
-  padding: 32px 0;
+  padding: 22px 0;
 }
 
 .login-layout {
@@ -52,7 +53,7 @@ select {
 .admin-panel,
 .brand-panel-section,
 .hero-band {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.96);
   border: 1px solid rgba(217, 225, 234, 0.85);
   box-shadow: var(--shadow);
 }
@@ -249,12 +250,12 @@ button:disabled {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 22px;
+  margin-bottom: 14px;
 }
 
 .topbar h1 {
   margin: 0;
-  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-size: clamp(1.55rem, 3.2vw, 2.35rem);
 }
 
 .topbar-actions {
@@ -291,31 +292,40 @@ button:disabled {
 }
 
 .hero-band {
-  min-height: 230px;
-  padding: 34px;
+  min-height: 138px;
+  padding: 22px 26px;
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 24px;
   overflow: hidden;
+  color: #fff;
+  background:
+    linear-gradient(135deg, rgba(16, 32, 51, 0.97), rgba(11, 114, 133, 0.94)),
+    linear-gradient(180deg, #fff, #fff);
 }
 
 .hero-band h2 {
-  margin-bottom: 8px;
-  font-size: clamp(2rem, 6vw, 4.6rem);
+  margin-bottom: 6px;
+  font-size: clamp(1.85rem, 4vw, 3.3rem);
   line-height: 1;
+}
+
+.hero-band .label,
+.hero-band p {
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .achievement-ring {
   --score: 0%;
-  width: clamp(132px, 22vw, 190px);
+  width: clamp(104px, 14vw, 140px);
   aspect-ratio: 1;
   flex: 0 0 auto;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: conic-gradient(var(--accent) var(--score), #e7edf4 0);
+  background: conic-gradient(var(--gold) var(--score), rgba(255, 255, 255, 0.24) 0);
 }
 
 .achievement-ring span {
@@ -324,40 +334,54 @@ button:disabled {
   display: grid;
   place-items: center;
   border-radius: 50%;
+  color: var(--navy);
   background: #fff;
-  font-size: clamp(1.5rem, 4vw, 2.45rem);
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
   font-weight: 800;
 }
 
 .metric-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .metric-card {
-  min-height: 146px;
-  padding: 24px;
+  position: relative;
+  min-height: 104px;
+  padding: 16px 18px;
   border-radius: 8px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(231, 245, 247, 0.55), transparent 62%),
+    #fff;
+}
+
+.metric-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--accent);
 }
 
 .metric-card strong {
   display: block;
   overflow-wrap: anywhere;
-  font-size: clamp(1.55rem, 4vw, 2.5rem);
+  font-size: clamp(1.28rem, 2.35vw, 2rem);
   line-height: 1.1;
 }
 
 .status-panel {
-  margin-top: 16px;
-  padding: 24px;
+  margin-top: 12px;
+  padding: 16px 18px;
   border-radius: 8px;
 }
 
 .senior-controls {
-  margin-top: 16px;
-  padding: 20px 24px;
+  margin-top: 12px;
+  padding: 14px 18px;
   border: 1px solid rgba(217, 225, 234, 0.85);
   border-radius: 8px;
   display: flex;
@@ -376,14 +400,14 @@ button:disabled {
 
 .admin-panel,
 .brand-panel-section {
-  margin-top: 16px;
-  padding: 24px;
+  margin-top: 12px;
+  padding: 18px;
   border-radius: 8px;
 }
 
 .section-heading h2 {
-  margin: 0 0 18px;
-  font-size: 1.5rem;
+  margin: 0 0 14px;
+  font-size: 1.2rem;
 }
 
 .brand-grid {
@@ -423,7 +447,7 @@ button:disabled {
 }
 
 .brand-table {
-  min-width: 1280px;
+  min-width: 1180px;
 }
 
 .brand-table td:first-child,
@@ -464,7 +488,7 @@ table {
 
 th,
 td {
-  padding: 14px 12px;
+  padding: 10px 10px;
   border-bottom: 1px solid var(--line);
   text-align: left;
   white-space: nowrap;
@@ -472,11 +496,12 @@ td {
 
 th {
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
 }
 
 td {
+  font-size: 0.88rem;
   font-weight: 700;
 }
 
@@ -520,8 +545,8 @@ td {
 
 @media (max-width: 620px) {
   .shell {
-    width: min(100% - 20px, 1180px);
-    padding: 10px 0;
+    width: min(100% - 14px, 1180px);
+    padding: 7px 0;
   }
 
   .login-layout,
@@ -534,7 +559,16 @@ td {
   .hero-band,
   .metric-card,
   .status-panel {
-    padding: 22px;
+    padding: 14px;
+  }
+
+  .topbar h1 {
+    font-size: 1.55rem;
+  }
+
+  .hero-band {
+    min-height: 112px;
+    gap: 12px;
   }
 
   .topbar,
@@ -552,13 +586,32 @@ td {
 
   .achievement-ring {
     align-self: center;
+    width: 96px;
   }
 
   .metric-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .metric-card {
+    min-height: 86px;
+  }
+
+  .metric-card strong {
+    font-size: 1.2rem;
+  }
+
+  .label {
+    font-size: 0.64rem;
   }
 
   .brand-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-panel,
+  .brand-panel-section {
+    padding: 14px;
   }
 }
